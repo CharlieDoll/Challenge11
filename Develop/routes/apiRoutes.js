@@ -1,15 +1,36 @@
-const express = require("express");
-const routesApi = require("routesApi");
+const router = require("express").Router();
+let db = require("../db/db.json");
+const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
-const PORT = 3001;
-const app = express();
-
-app.get("/", (req, res) => {
-  res.send("Visit http://localhost:3001/index.html");
+router.get("/notes", (req, res) => {
+  //   console.log(uuidv4());
+  res.json(db);
 });
 
-app.get("./index.html", (req, res) => res.json(routesApi));
+router.post("/notes", (req, res) => {
+  //   console.log(req.body);
+  req.body.id = uuidv4();
+  //   console.log("after");
+  //   console.log(req.body);
+  // push req.body in to db variable
+  req.body.push(db);
+  // fs write file method - rewrite db.json file - use db variable line 16
+  fs.writeFile(
+    ".db/notes.html.json",
+    JSON.stringify(req.body, null, 4),
+    (writeErr) =>
+      writeErr
+        ? console.error(writeErr)
+        : console.info("Successfully updated notes!")
+  );
+  //  res.json req.body
+});
 
-app.listen(PORT, () =>
-  console.log(`app listening at http://localhost:${PORT}`)
-);
+// router.get("./api/index.html", (req, res) => res.json(routesApi));
+
+// router.post("/notes.html", (req, res) =>
+//   console.info(`${req.method} request received to add a note`)
+// );
+
+module.exports = router;
