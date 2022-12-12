@@ -32,5 +32,7 @@ router.post("/notes", (req, res) => {
 // router.post("/notes.html", (req, res) =>
 //   console.info(`${req.method} request received to add a note`)
 // );
-
+router.delete("/notes", (req, res) => {
+  res.send("DELETE note");
+});
 module.exports = router;
