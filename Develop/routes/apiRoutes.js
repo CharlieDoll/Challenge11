@@ -14,17 +14,14 @@ router.post("/notes", (req, res) => {
   //   console.log("after");
   //   console.log(req.body);
   // push req.body in to db variable
-  req.body.push(db);
+  db.push(req.body);
   // fs write file method - rewrite db.json file - use db variable line 16
-  fs.writeFile(
-    ".db/notes.html.json",
-    JSON.stringify(req.body, null, 4),
-    (writeErr) =>
-      writeErr
-        ? console.error(writeErr)
-        : console.info("Successfully updated notes!")
+  fs.writeFile("./db/db.json", JSON.stringify(db), (writeErr) =>
+    writeErr
+      ? console.error(writeErr)
+      : console.info("Successfully updated notes!")
   );
-  //  res.json req.body
+  res.json(req.body);
 });
 
 // router.get("./api/index.html", (req, res) => res.json(routesApi));
@@ -32,7 +29,14 @@ router.post("/notes", (req, res) => {
 // router.post("/notes.html", (req, res) =>
 //   console.info(`${req.method} request received to add a note`)
 // );
-router.delete("/notes", (req, res) => {
-  res.send("DELETE note");
+router.delete("/notes/:id", (req, res) => {
+  let noteID = req.params.id;
+  db = db.filter((note) => note.id !== noteID);
+  fs.writeFile("./db/db.json", JSON.stringify(db), (writeErr) =>
+    writeErr
+      ? console.error(writeErr)
+      : console.info("Successfully updated notes!")
+  );
+  res.json({ message: "Successfully Deleted!" });
 });
 module.exports = router;

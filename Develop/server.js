@@ -11,7 +11,4 @@ app.use("/api", apiRoutes);
 app.use("/", htmlRoutes);
 app.listen(PORT, () => {
   console.log(`app listening on PORT ${PORT}`);
-  app.delete("/", (req, res) => {
-    console.log(req.method); // "DELETE"
-  });
 });
